@@ -23,28 +23,38 @@ class UserController extends Controller
 
         $activeMenu = 'user'; //set menu yang sedang aktif
 
-        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'activeMenu' => $activeMenu]);
+        $level = LevelModel::all();
+
+        return view('user.index', ['breadcrumb' => $breadcrumb, 'page' => $page, 'level' => $level, 'activeMenu' => $activeMenu]);
     }
 
     public function list(Request $request) 
 { 
-    $users = UserModel::select('user_id', 'username', 'nama', 'level_id') 
-                ->with('level')
-                ->get();
- 
+    // Menggunakan query() agar filtering bekerja sebelum data diambil
+    $query = UserModel::select('user_id', 'username', 'nama', 'level_id')
+                ->with('level');
+
+    // Filter data user berdasarkan level_id
+    if ($request->level_id) {
+        $query->where('level_id', $request->level_id);
+    }
+
+    $users = $query->get(); // Data diambil setelah filtering
+
     return DataTables::of($users) 
-        // menambahkan kolom index / no urut (default nama kolom: DT_RowIndex) 
         ->addIndexColumn()  
-        ->addColumn('aksi', function ($user) {  // menambahkan kolom aksi 
-            $btn  = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn sm">Detail</a> '; 
-            $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn warning btn-sm">Edit</a> '; 
-            $btn .= '<form class="d-inline-block" method="POST" action="'. url('/user/'.$user->user_id).'">' . csrf_field() . method_field('DELETE') .  
-            '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakit menghapus data ini?\');">Hapus</button></form>';      
+        ->addColumn('aksi', function ($user) {  
+            $btn  = '<a href="'.url('/user/' . $user->user_id).'" class="btn btn-info btn-sm">Detail</a> '; 
+            $btn .= '<a href="'.url('/user/' . $user->user_id . '/edit').'" class="btn btn-warning btn-sm">Edit</a> '; 
+            $btn .= '<form class="d-inline-block" method="POST" action="'. url('/user/'.$user->user_id).'">' 
+                  . csrf_field() . method_field('DELETE') .  
+                  '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Apakah Anda yakin menghapus data ini?\');">Hapus</button></form>';      
             return $btn; 
         }) 
-        ->rawColumns(['aksi']) // memberitahu bahwa kolom aksi adalah html 
+        ->rawColumns(['aksi']) 
         ->make(true); 
-    }
+}
+
 
     public function create()
     {
