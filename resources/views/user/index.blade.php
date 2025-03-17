@@ -6,6 +6,7 @@
         <h3 class="card-title">{{ $page->title }}</h3> 
         <div class="card-tools"> 
           <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a> 
+          <button onclick="modalAction('{{ url('/user/create_ajax') }}')" class="btn btn-sm btn-success mt-1">Tambah Ajax</button> 
         </div> 
       </div> 
       <div class="card-body">
@@ -47,15 +48,39 @@
         </table>
     </div> 
   </div> 
+  
+  {{-- Modal Container --}}
+  <div id="modal-crud" class="modal fade animate shake" tabindex="-1" role="dialog" data-backdrop="static"
+  data-keyboard="false" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content"></div>
+  </div>
+</div>
 @endsection 
- 
+
 @push('css') 
 @endpush 
  
 @push('js') 
   <script> 
+  function modalAction(url) {
+            // Kosongkan modal sebelum memuat konten baru
+            $("#modal-crud .modal-content").html("");
+
+            // Panggil modal melalui AJAX
+            $.get(url, function (response) {
+                $("#modal-crud .modal-content").html(response);
+                $("#modal-crud").modal("show");
+            });
+        }
+
+        // Bersihkan isi modal setelah ditutup
+        $('#modal-crud').on('hidden.bs.modal', function () {
+            $("#modal-crud .modal-content").html("");
+        });
+  var dataUser;
     $(document).ready(function() { 
-      var dataUser = $('#table_user').DataTable({ 
+      dataUser = $('#table_user').DataTable({ 
           // serverSide: true, jika ingin menggunakan server side processing 
           serverSide: true,      
           ajax: { 
