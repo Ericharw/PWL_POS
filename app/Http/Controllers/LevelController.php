@@ -258,16 +258,24 @@ class LevelController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $level = LevelModel::find($id);
-            if ($level) {
+            
+            if (!$level) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+
+            try {
                 $level->delete();
                 return response()->json([
                     'status' => true,
                     'message' => 'Data berhasil dihapus'
                 ]);
-            } else {
+            } catch (\Illuminate\Database\QueryException $e) {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Data tidak ditemukan'
+                    'message' => 'Data gagal dihapus! Masih terdapat data lain yang terkait dengan data ini.'
                 ]);
             }
         }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KategoriModel;
 use App\Models\LevelModel;
 use App\Models\UserModel;
 use Illuminate\Http\Request;
@@ -281,17 +282,31 @@ class UserController extends Controller
     }
 
     public function delete_ajax(Request $request, $id)
-    {
-    // Cek apakah request dari ajax
+{
     if ($request->ajax() || $request->wantsJson()) {
-        $user = UserModel::find($id);
+        $kategori = KategoriModel::find($id);
+        
+        if ($kategori) {
+            try {
+                $kategori->delete();
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } catch (\Illuminate\Database\QueryException $e) {
+                // Cek apakah error karena foreign key constraint
+                if ($e->errorInfo[1] == 1451) { // 1451 adalah kode error MySQL untuk foreign key constraint
+                    return response()->json([
+                        'status' => false,
+                        'message' => 'Data gagal dihapus karena masih terdapat data lain yang terkait dengan data ini. Silakan hapus data terkait terlebih dahulu.'
+                    ]);
+                }
 
-        if ($user) {
-            $user->delete();
-            return response()->json([
-                'status' => true,
-                'message' => 'Data berhasil dihapus'
-            ]);
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Terjadi kesalahan saat menghapus data.'
+                ]);
+            }
         } else {
             return response()->json([
                 'status' => false,
@@ -300,5 +315,5 @@ class UserController extends Controller
         }
     }
     return redirect('/');
-    }
+}
 }
