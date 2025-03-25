@@ -7,6 +7,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -29,6 +30,9 @@ Route::pattern('id','[0-9]+'); // artinya ketika ada parameter {id}, maka harus 
 Route::get('login', [AuthController::class,'login'])->name('login');
 Route::post('login', [AuthController::class,'postlogin']);
 Route::get('logout', [AuthController::class,'logout'])->middleware('auth');
+
+Route::get('register', [RegisterController::class, 'index']);
+Route::post('register', [RegisterController::class, 'store']);
 
 Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam group ini harus
 
@@ -73,7 +77,7 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::delete('/level/{id}', [LevelController::class, 'destroy']);
     });
     
-    Route::middleware(['authorize:STF'])->group(function () {
+    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
         Route::get('/kategori', [KategoriController::class, 'index']);
         Route::get('kategori/list', [KategoriController::class, 'list']);
         Route::get('kategori/create', [KategoriController::class, 'create']);
@@ -109,21 +113,21 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::delete('supplier/{id}', [SupplierController::class, 'destroy']);
     });
     
-    Route::middleware(['authorize:ADM,MNG,STF'])->group(function () {
-        Route::get('/barang', [BarangController::class, 'index']);
-        Route::get('/barang/list', [BarangController::class, 'list']);
-        Route::get('/barang/create', [BarangController::class, 'create']);
-        Route::get('/barang/create_ajax', [BarangController::class, 'create_ajax']);
-        Route::post('/barang', [BarangController::class, 'store']);
-        Route::post('/barang/ajax', [BarangController::class, 'store_ajax']);
-        Route::get('/barang/{id}', [BarangController::class, 'show']);
-        Route::get('/barang/{id}/show_ajax', [BarangController::class, 'show_ajax']);
-        Route::get('/barang/{id}/edit', [BarangController::class, 'edit']);
-        Route::put('/barang/{id}', [BarangController::class, 'update']);
-        Route::get('/barang/{id}/edit_ajax', [BarangController::class, 'edit_ajax']);
-        Route::put('/barang/{id}/update_ajax', [BarangController::class, 'update_ajax']);
-        Route::get('/barang/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);
-        Route::delete('/barang/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);
-        Route::delete('/barang/{id}', [BarangController::class, 'destroy']);
+    Route::group(['prefix' => 'barang'], function () {
+        Route::get('/', [BarangController::class, 'index']);
+        Route::get('/list', [BarangController::class, 'list']);
+        Route::get('/create', [BarangController::class, 'create']);
+        Route::get('/create_ajax', [BarangController::class, 'create_ajax']);
+        Route::post('/', [BarangController::class, 'store']);
+        Route::post('/ajax', [BarangController::class, 'store_ajax']);
+        Route::get('/{id}', [BarangController::class, 'show']);
+        Route::get('/{id}/show_ajax', [BarangController::class, 'show_ajax']);
+        Route::get('/{id}/edit', [BarangController::class, 'edit']);
+        Route::put('/{id}', [BarangController::class, 'update']);
+        Route::get('/{id}/edit_ajax', [BarangController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [BarangController::class, 'update_ajax']);
+        Route::get('/{id}/delete_ajax', [BarangController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [BarangController::class, 'delete_ajax']);
+        Route::delete('/{id}', [BarangController::class, 'destroy']);
     });
 });
