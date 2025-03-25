@@ -66,6 +66,13 @@
               <p>Supplier</p>
           </a>
         </li>
+        <!-- Menambahkan menu logout -->
+        <li class="nav-header">Logout</li>
+                <a href="#" class="nav-link text-danger" data-toggle="modal" data-target="#logoutModal">
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                    <p>Logout</p>
+                </a>
+            </li>
       </ul> 
     </nav> 
   </div> 
