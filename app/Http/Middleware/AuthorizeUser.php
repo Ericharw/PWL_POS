@@ -13,14 +13,13 @@ class AuthorizeUser
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, $role = ''): Response
+    public function handle(Request $request, Closure $next, ... $roles): Response
     {
-        // return $next($request);
-        $user = $request->user();
+        $user_role = $request->user()->getRole();  // ambil data level_kode dari user yg login
 
-        if ($user && $user->hasRole($role)) {
-            return $next($request);
+        if (in_array($user_role, $roles)) { // cek apakah level_kode user ada di dalam array roles
+            return $next($request); // jika ada, maka lanjutkan request
         }
-        abort(403);
+        abort(403, 'Forbidden. Kamu tidak punya akses ke halaman ini');
     }
 }
