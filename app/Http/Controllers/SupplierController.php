@@ -333,4 +333,51 @@ class SupplierController extends Controller
         }
         return redirect('/');
     }
+
+    public function export_excel(Request $request)
+{
+    $supplier = SupplierModel::select('supplier_id', 'supplier_nama', 'alamat', 'telepon')->get();
+
+    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+    $sheet = $spreadsheet->getActiveSheet();
+
+    // Header
+    $sheet->setCellValue('A1', 'No');
+    $sheet->setCellValue('B1', 'Nama Supplier');
+    $sheet->setCellValue('C1', 'Alamat');
+    $sheet->setCellValue('D1', 'Telepon');
+
+    $sheet->getStyle('A1:D1')->getFont()->setBold(true);
+
+    // Isi data
+    $no = 1;
+    $baris = 2;
+    foreach ($supplier as $value) {
+        $sheet->setCellValue('A' . $baris, $no);
+        $sheet->setCellValue('B' . $baris, $value->supplier_nama);
+        $sheet->setCellValue('C' . $baris, $value->alamat);
+        $sheet->setCellValue('D' . $baris, $value->telepon);
+        $baris++;
+        $no++;
+    }
+
+    foreach (range('A', 'D') as $columnID) {
+        $sheet->getColumnDimension($columnID)->setAutoSize(true);
+    }
+
+    $sheet->setTitle('Data Supplier');
+    $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
+    $filename = 'Data_Supplier_' . date('Y-m-d_His') . '.xlsx';
+
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="' . $filename . '"');
+    header('Cache-Control: max-age=0');
+    header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+    header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+    header('Pragma: public');
+
+    $writer->save('php://output');
+    exit;
+}
+
 }
