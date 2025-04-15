@@ -97,6 +97,8 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::get('kategori/{id}/delete_ajax', [KategoriController::class, 'confirm_ajax']);
         Route::delete('kategori/{id}/delete_ajax', [KategoriController::class, 'delete_ajax']);
         Route::delete('kategori/{id}', [KategoriController::class, 'destroy']);
+        Route::get('/kategori/import', [KategoriController::class, 'import']);
+        Route::post('/kategori/import_ajax', [KategoriController::class, 'import_ajax']);
     });
     
     Route::middleware(['authorize:ADM,MNG'])->group(function () {
