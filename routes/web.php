@@ -117,6 +117,8 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::get('supplier/{id}/delete_ajax', [SupplierController::class, 'confirm_ajax']);
         Route::delete('supplier/{id}/delete_ajax', [SupplierController::class, 'delete_ajax']);
         Route::delete('supplier/{id}', [SupplierController::class, 'destroy']);
+        Route::get('/supplier/import', [SupplierController::class, 'import']);
+        Route::post('/supplier/import_ajax', [SupplierController::class, 'import_ajax']);
     });
     
     Route::group(['prefix' => 'barang'], function () {
