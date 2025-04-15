@@ -5,9 +5,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <style>
         body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            margin: 20px;
-            background-color: #f9f9f9;
+            font-family: "Times New Roman", Times, serif;
+            margin: 6px 20px 5px 20px;
+            line-height: 15px;
         }
 
         table {
@@ -15,95 +15,107 @@
             border-collapse: collapse;
         }
 
-        th,
-        td {
-            padding: 10px;
-            font-size: 12pt;
+        td,
+        th {
+            padding: 4px 3px;
         }
 
         th {
-            background-color: #3f51b5;
-            color: white;
-            text-align: center;
+            text-align: left;
         }
 
-        td {
-            background-color: #fff;
+        .d-block {
+            display: block;
         }
 
-        tr:nth-child(even) td {
-            background-color: #f2f2f2;
+        img.image {
+            width: auto;
+            height: 80px;
+            max-width: 150px;
+            max-height: 150px;
         }
 
-        tr:hover td {
-            background-color: #e1f5fe;
+        .text-right {
+            text-align: right;
         }
 
         .text-center {
             text-align: center;
         }
 
-        .header-table {
-            border-bottom: 2px solid #3f51b5;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+        .p-1 {
+            padding: 5px 1px 5px 1px;
         }
 
-        .font-bold {
-            font-weight: bold;
-        }
-
-        .title {
-            text-align: center;
-            font-size: 18pt;
-            color: #333;
-            margin: 20px 0;
-        }
-
-        .logo {
-            width: 90px;
-            height: auto;
-        }
-
-        .info-header {
+        .font-10 {
             font-size: 10pt;
-            color: #333;
         }
 
-        .bordered {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        .font-11 {
+            font-size: 11pt;
+        }
+
+        .font-12 {
+            font-size: 12pt;
+        }
+
+        .font-13 {
+            font-size: 13pt;
+        }
+
+        .border-bottom-header {
+            border-bottom: 1px solid;
+        }
+
+        .border-all,
+        .border-all th,
+        .border-all td {
+            border: 1px solid;
         }
     </style>
 </head>
 
 <body>
-    <div class="title">LAPORAN DATA USER</div>
+    <table class="border-bottom-header">
+        <tr>
+            <td width="15%" class="text-center"><img src="{{ asset('img/logo-polinema.png')}}" width="100" height="100">
+            </td>
+            <td width="85%">
+                <span class="text-center d-block font-11 font-bold mb-1">KEMENTERIAN
+                    PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI</span>
+                <span class="text-center d-block font-13 font-bold mb-1">POLITEKNIK NEGERI
+                    MALANG</span>
+                <span class="text-center d-block font-10">Jl. Soekarno-Hatta No. 9 Malang
+                    65141</span>
+                <span class="text-center d-block font-10">Telepon (0341) 404424 Pes. 101-
+                    105, 0341-404420, Fax. (0341) 404420</span>
+                <span class="text-center d-block font-10">Laman: www.polinema.ac.id</span>
+            </td>
+        </tr>
+    </table>
 
-    <div class="bordered">
-        <table>
-            <thead>
+    <h3 class="text-center">LAPORAN DATA USER</h3>
+
+    <table class="border-all font-11">
+        <thead>
+            <tr>
+                <th class="text-center">No</th>
+                <th>Username</th>
+                <th>Nama</th>
+                <th>Level Pengguna</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($user as $u)
                 <tr>
-                    <th>No</th>
-                    <th>Username</th>
-                    <th>Nama</th>
-                    <th>Level Pengguna</th>
+                    <td class="text-center">{{ $loop->iteration }}</td>
+                    <td>{{ $u->username }}</td>
+                    <td>{{ $u->nama }}</td>
+                    <td>{{ $u->level->level_nama }}</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach($user as $u)
-                    <tr>
-                        <td class="text-center">{{ $loop->iteration }}</td>
-                        <td>{{ $u->username }}</td>
-                        <td>{{ $u->nama }}</td>
-                        <td class="text-center">{{ $u->level->level_nama }}</td>
-                    </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+            @endforeach
+        </tbody>
+    </table>
 </body>
 
 </html>
