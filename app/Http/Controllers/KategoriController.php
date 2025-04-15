@@ -386,7 +386,7 @@ class KategoriController extends Controller
     public function export_pdf()
     {
         $kategori = KategoriModel::select('kategori_id', 'kategori_nama', 'kategori_kode')
-            ->orderBy('kategori_nama', 'asc')
+            ->orderBy('kategori_id', 'asc')
             ->get();
 
         $pdf = Pdf::loadView('kategori.export_pdf', ['kategori' => $kategori]);
