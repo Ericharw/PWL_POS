@@ -12,7 +12,9 @@
             <select name="level_id" id="level_id" class="form-control" required>
                 <option value="">- Pilih Level -</option>
                 @foreach($level as $l)
-                    <option value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
+                    @if($l->level_kode != 'ADM' && $l->level_kode != 'MNG')
+                        <option value="{{ $l->level_id }}">{{ $l->level_nama }}</option>
+                    @endif
                 @endforeach
             </select>
             <small id="error-level_id" class="error-text form-text text-danger"></small>
@@ -33,9 +35,8 @@
             <small id="error-password" class="error-text form-text text-danger"></small>
         </div>
         <p class="text-muted small">
-            Already have an account? 
-            <a data-dismiss="modal"
-                class="fw-medium text-primary text-decoration-underline">Login here</a>
+            Already have an account?
+            <a data-dismiss="modal" class="fw-medium text-primary text-decoration-underline">Login here</a>
         </p>
     </div>
     <div class="modal-footer">
