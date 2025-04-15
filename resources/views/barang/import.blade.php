@@ -53,7 +53,7 @@
                                 text: response.message
                             }).then(() => {
                                 $('#modal-crud').modal('hide'); // Modal ditutup setelah klik OK
-                                tableBarang.ajax.reload(); // Reload data setelah modal ditutup
+                                dataBarang.ajax.reload(); // Reload data setelah modal ditutup
                             });
                         } else {
                             $('.error-text').text('');
