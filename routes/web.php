@@ -59,6 +59,8 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::delete('/user/{id}', [UserController::class, 'destroy']);
         Route::get('/user/import', [UserController::class, 'import']);
         Route::post('/user/import_ajax', [UserController::class, 'import_ajax']);
+        Route::get('/user/export_excel', [UserController::class, 'export_excel']);
+
     });
     
     Route::middleware(['authorize:ADM'])->group(function () {
