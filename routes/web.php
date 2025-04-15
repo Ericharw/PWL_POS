@@ -127,6 +127,7 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::get('/supplier/import', [SupplierController::class, 'import']);
         Route::post('/supplier/import_ajax', [SupplierController::class, 'import_ajax']);
         Route::get('/supplier/export_excel', [SupplierController::class, 'export_excel']);
+        Route::get('/supplier/export_pdf', [SupplierController::class, 'export_pdf']);
     });
     
     Route::group(['prefix' => 'barang'], function () {
