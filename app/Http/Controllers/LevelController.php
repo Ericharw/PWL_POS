@@ -290,56 +290,53 @@ class LevelController extends Controller
     }
     public function import_ajax(Request $request)
     {
-        if ($request->ajax() || $request->wantsJson()) {
+        if($request->ajax() || $request->wantsJson()){
             $rules = [
+                // validasi file harus xls atau xlsx, max 1MB
                 'file_level' => ['required', 'mimes:xlsx', 'max:1024']
             ];
             $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
+            if($validator->fails()){
                 return response()->json([
                     'status' => false,
                     'message' => 'Validasi Gagal',
                     'msgField' => $validator->errors()
                 ]);
             }
-
-            $file = $request->file('file_level');
-            $reader = IOFactory::createReader('Xlsx');
-            $reader->setReadDataOnly(true);
-            $spreadsheet = $reader->load($file->getRealPath());
-            $sheet = $spreadsheet->getActiveSheet();
-            $data = $sheet->toArray(null, false, true, true);
-
+            $file = $request->file('file_level'); // ambil file dari request
+            $reader = IOFactory::createReader('Xlsx'); // load reader file excel
+            $reader->setReadDataOnly(true); // hanya membaca data
+            $spreadsheet = $reader->load($file->getRealPath()); // load file excel
+            $sheet = $spreadsheet->getActiveSheet(); // ambil sheet yang aktif
+            $data = $sheet->toArray(null, false, true, true); // ambil data excel
             $insert = [];
-            if (count($data) > 1) {
+            if(count($data) > 1){ // jika data lebih dari 1 baris
                 foreach ($data as $baris => $value) {
-                    if ($baris > 1) {
+                    if($baris > 1){ // baris ke 1 adalah header, maka lewati
                         $insert[] = [
-                            'level_id' => $value['A'],
-                            'level_nama' => $value['B'],
-                            'level_kode' => $value['C'],
+                            'level_nama' => $value['A'],
+                            'level_kode' => $value['B'],
                             'created_at' => now(),
                         ];
                     }
                 }
-                if (count($insert) > 0) {
+                if(count($insert) > 0){
+                    // insert data ke database, jika data sudah ada, maka diabaikan
                     LevelModel::insertOrIgnore($insert);
                 }
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data level berhasil diimport'
+                    'message' => 'Data berhasil diimport'
                 ]);
-            } else {
+            }else{
                 return response()->json([
                     'status' => false,
                     'message' => 'Tidak ada data yang diimport'
                 ]);
             }
         }
-
         return redirect('/');
     }
-
     public function export_excel(Request $request)
      {
          // Ambil data barang dengan filter kategori jika ada

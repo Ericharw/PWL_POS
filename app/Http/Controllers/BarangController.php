@@ -330,7 +330,6 @@ class BarangController extends Controller
     {
         return view('barang.import');
     }
-
     public function import_ajax(Request $request)
     {
         if ($request->ajax() || $request->wantsJson()) {
@@ -346,10 +345,7 @@ class BarangController extends Controller
                     'msgField' => $validator->errors()
                 ]);
             }
-
-
-            $file = $request->file('file_barang');
-
+            $file = $request->file('file_barang'); // ambil file dari request
             $reader = IOFactory::createReader('Xlsx'); // load reader file excel
             $reader->setReadDataOnly(true); // hanya membaca data
             $spreadsheet = $reader->load($file->getRealPath()); // load file excel
@@ -361,9 +357,10 @@ class BarangController extends Controller
                     if ($baris > 1) { // baris ke 1 adalah header, maka lewati
                         $insert[] = [
                             'kategori_id' => $value['A'],
-                            'barang_nama' => $value['B'],
-                            'harga_beli' => $value['C'],
-                            'harga_jual' => $value['D'],
+                            'barang_kode' => $value['B'],
+                            'barang_nama' => $value['C'],
+                            'harga_beli' => $value['D'],
+                            'harga_jual' => $value['E'],
                             'created_at' => now(),
                         ];
                     }

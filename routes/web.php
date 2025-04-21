@@ -7,6 +7,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\LevelController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
@@ -150,5 +151,11 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::post('/import_ajax', [BarangController::class, 'import_ajax']);
         Route::get('/export_excel', [BarangController::class, 'export_excel']);
         Route::get('/export_pdf', [BarangController::class, 'export_pdf']);
+    });
+
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
+        Route::post('/update', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/delete', [ProfileController::class, 'delete'])->name('profile.delete');
     });
 });
