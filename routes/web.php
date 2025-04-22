@@ -9,6 +9,7 @@ use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\StokController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
@@ -157,5 +158,38 @@ Route::middleware(['auth'])->group(function(){ // artinya semua route di dalam g
         Route::get('/', [ProfileController::class, 'index'])->name('profile.index');
         Route::post('/update', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/delete', [ProfileController::class, 'delete'])->name('profile.delete');
+    });
+
+    Route::group(['prefix' => 'stok'], function () {
+        Route::get('/', [StokController::class, 'index']);
+        Route::get('/list', [StokController::class, 'list']);
+        Route::get('/create_ajax', [StokController::class, 'create_ajax']);
+        Route::post('/ajax', [StokController::class, 'store_ajax']);
+        Route::get('/import', [StokController::class, 'import']);
+        Route::post('/import_ajax', [StokController::class, 'import_ajax']);
+        Route::get('/export_excel', [StokController::class, 'export_excel']);
+        Route::get('/export_pdf', [StokController::class, 'export_pdf']);
+        Route::get('/{id}/show_ajax', [StokController::class, 'show_ajax']);
+        Route::get('/{id}/edit_ajax', [StokController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [StokController::class, 'update_ajax']);
+        Route::get('/{id}/delete_ajax', [StokController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [StokController::class, 'delete_ajax']);
+    });
+
+    Route::group(['prefix' => 'penjualan'], function () {
+        Route::get('/', [PenjualanController::class, 'index']);
+        Route::get('/list', [PenjualanController::class, 'list']);
+        Route::get('/create_ajax', [PenjualanController::class, 'create_ajax']);
+        Route::post('/store_ajax', [PenjualanController::class, 'store_ajax']);
+        Route::get('/import', [PenjualanController::class, 'import']);
+        Route::post('/import_ajax', [PenjualanController::class, 'import_ajax']);
+        Route::get('/export_excel', [PenjualanController::class, 'export_excel']);
+        Route::get('/export_pdf', [PenjualanController::class, 'export_pdf']);
+        Route::get('/{id}/show_ajax', [PenjualanController::class, 'show_ajax']);
+        Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax']);
+        Route::get('/{id}/edit_ajax', [PenjualanController::class, 'edit_ajax']);
+        Route::put('/{id}/update_ajax', [PenjualanController::class, 'update_ajax']);
+        Route::get('/{id}/delete_ajax', [PenjualanController::class, 'confirm_ajax']);
+        Route::delete('/{id}/delete_ajax', [PenjualanController::class, 'delete_ajax']);
     });
 });

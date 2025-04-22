@@ -74,9 +74,15 @@
         <li class="nav-item">
           <a href="{{ url('/supplier') }}" class="nav-link {{ ($activeMenu == 'supplier') ? 'active' : '' }} ">
               <i class="nav-icon fas fa-truck"></i>
-              <p>Supplier</p>
+              <p>Data Supplier</p>
           </a>
         </li>
+        <li class="nav-item">
+          <a href="{{ url('/penjualan') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-cash-register"></i>
+              <p>Transaksi Penjualan</p>
+          </a>
+      </li>
         <!-- Menambahkan menu logout -->
         <li class="nav-header">Logout</li>
                 <a href="#" class="nav-link text-danger" data-toggle="modal" data-target="#logoutModal">

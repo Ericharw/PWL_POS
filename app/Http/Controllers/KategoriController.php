@@ -343,23 +343,21 @@ class KategoriController extends Controller
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet(); //ambil sheet yang aktif
 
-        $sheet->setCellValue('A1', 'No');
+        $sheet->setCellValue('A1', 'Kode');
         $sheet->setCellValue('B1', 'Nama Kategori');
-        $sheet->setCellValue('C1', 'Kode');
 
         $sheet->getStyle('A1:C1')->getFont()->setBold(true);
 
         $no = 1;
         $baris = 2;
         foreach ($kategori as $value) {
-            $sheet->setCellValue('A' . $baris, $no);
+            $sheet->setCellValue('A' . $baris, $value->kategori_kode);
             $sheet->setCellValue('B' . $baris, $value->kategori_nama);
-            $sheet->setCellValue('C' . $baris, $value->kategori_kode);
             $baris++;
             $no++;
         }
 
-        foreach (range('A', 'C') as $columnID) {
+        foreach (range('A', 'B') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 

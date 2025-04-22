@@ -314,8 +314,8 @@ class LevelController extends Controller
                 foreach ($data as $baris => $value) {
                     if($baris > 1){ // baris ke 1 adalah header, maka lewati
                         $insert[] = [
-                            'level_nama' => $value['A'],
-                            'level_kode' => $value['B'],
+                            'level_kode' => $value['A'],
+                            'level_nama' => $value['B'],
                             'created_at' => now(),
                         ];
                     }
