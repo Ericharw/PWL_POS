@@ -236,9 +236,11 @@ class StokController extends Controller
     {
         if ($request->ajax() || $request->wantsJson()) {
             $rules = [
-                'file_stok' => ['required', 'file', 'mimes:xlsx,xls,csv', 'max:1024'],
+                // validasi file harus xls atau xlsx, max 1MB
+                'file_stok' => ['required', 'mimes:xlsx', 'max:1024']
             ];
 
+            // Validasi file
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 return response()->json([
@@ -248,47 +250,52 @@ class StokController extends Controller
                 ]);
             }
 
+            // Mendapatkan file dari request
             $file = $request->file('file_stok');
 
-            $reader = IOFactory::createReader('Xlsx');
-            $reader->setReadDataOnly(true);
-            $spreadsheet = $reader->load($file->getRealPath());
-            $sheet = $spreadsheet->getActiveSheet();
-
-            $data = $sheet->toArray(null, false, true, true);
+            // Membaca file excel
+            $reader = IOFactory::createReader('Xlsx'); // load reader file excel
+            $reader->setReadDataOnly(true); // hanya membaca data
+            $spreadsheet = $reader->load($file->getRealPath()); // load file excel
+            $sheet = $spreadsheet->getActiveSheet(); // ambil sheet yang aktif
+            $data = $sheet->toArray(null, false, true, true); // ambil data excel
 
             $insert = [];
-            if (count($data) > 1) {
+            if (count($data) > 1) { // jika data lebih dari 1 baris
                 foreach ($data as $baris => $value) {
-                    if ($baris > 1) {
+                    if ($baris > 1) { // baris ke 1 adalah header, maka lewati
                         $insert[] = [
-                            'supplier_id' => $value['A'],
-                            'barang_id' => $value['B'],
-                            'user_id' => $value['C'],
-                            'stok_tanggal' => $value['D'],
-                            'stok_jumlah' => $value['E'],
+                            'barang_id' => $value['A'], // barang_id
+                            'user_id' => $value['B'],    // user_id
+                            'supplier_id' => $value['C'], // supplier_id
+                            'stok_tanggal' => \Carbon\Carbon::parse($value['D'])->format('Y-m-d'), // stok_tanggal
+                            'stok_jumlah' => $value['E'],  // stok_jumlah
+                            'created_at' => now(),
+                            'updated_at' => now(),
                         ];
                     }
                 }
 
+                // Jika ada data yang akan diinsert
                 if (count($insert) > 0) {
+                    // Insert data ke database, jika data sudah ada maka diabaikan
                     StokModel::insertOrIgnore($insert);
                 }
 
                 return response()->json([
                     'status' => true,
-                    'message' => 'Data stok berhasil diimport!',
+                    'message' => 'Data stok berhasil diimpor'
                 ]);
             } else {
                 return response()->json([
                     'status' => false,
-                    'message' => 'Tidak ada data stok yang diimport!',
+                    'message' => 'Tidak ada data yang diimpor'
                 ]);
             }
         }
-        return redirect('/stok');
-    }
 
+        return redirect('/');
+    }
     public function export_excel()
     {
         $stoks = StokModel::select('stok_id', 'supplier_id', 'barang_id', 'user_id', 'stok_tanggal', 'stok_jumlah')->with(['barang', 'supplier', 'user'])->get();
