@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BarangController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\LevelController;
+use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -48,3 +49,9 @@ Route::post('barang', [BarangController::class, 'store']);
 Route::get('barang/{barang}', [BarangController::class, 'show']);
 Route::put('barang/{barang}', [BarangController::class, 'update']);
 Route::delete('barang/{barang}', [BarangController::class, 'destroy']);
+
+Route::get('supplier', [SupplierController::class, 'index']);
+Route::post('supplier', [SupplierController::class, 'store']);
+Route::get('supplier/{supplier}', [SupplierController::class, 'show']);
+Route::put('supplier/{supplier}', [SupplierController::class, 'update']);
+Route::delete('supplier/{supplier}', [SupplierController::class, 'destroy']);
