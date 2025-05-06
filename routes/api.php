@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\BarangController;
 use App\Http\Controllers\Api\KategoriController;
 use App\Http\Controllers\Api\LevelController;
+use App\Http\Controllers\Api\PenjualanController;
 use App\Http\Controllers\Api\SupplierController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
@@ -57,3 +58,6 @@ Route::post('supplier', [SupplierController::class, 'store']);
 Route::get('supplier/{supplier}', [SupplierController::class, 'show']);
 Route::put('supplier/{supplier}', [SupplierController::class, 'update']);
 Route::delete('supplier/{supplier}', [SupplierController::class, 'destroy']);
+
+Route::post('/penjualan', [PenjualanController::class, 'store']);
+Route::get('/penjualan/{penjualan}', [PenjualanController::class, 'show']);
